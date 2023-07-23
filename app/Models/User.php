@@ -43,7 +43,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function dailyReport()
+    public function dailyReports()
     {
         return $this->hasMany('App\Models\DailyReport');
     }

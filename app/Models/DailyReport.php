@@ -9,7 +9,7 @@ class DailyReport extends Model
 {
     use HasFactory;
 
-    public function dailyReportDetail()
+    public function dailyReportDetails()
     {
         return $this->hasMany('App\Models\DailyReportDetail');
     }
