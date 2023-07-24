@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DailyReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// 日報
+Route::middleware('auth')->group(function () {
+    Route::get('/daily_report', [DailyReportController::class, 'index'])->name('daily_report.index');
 });
 
 require __DIR__.'/auth.php';
