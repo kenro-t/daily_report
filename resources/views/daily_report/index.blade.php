@@ -1,6 +1,6 @@
 <h1>日報カレンダー一覧</h1>
 
-<div class='chat_room_list'>
+<div class='daily_report_list'>
         <ul>
             @foreach($daily_reports as $daily_report)
                 <li>
@@ -14,3 +14,21 @@
             @endforeach
         </ul>
 </div>
+
+<!-- FullCalenderの導入　後でMixに移行する -->
+<div id='calendar' style='max-width:800px; margin:0 auto;'></div>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=> {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            dateClick: (e)=> {
+                console.log(e)
+                // console.log(e.dateStr)
+            }
+        });
+        calendar.render();
+    });
+</script>
