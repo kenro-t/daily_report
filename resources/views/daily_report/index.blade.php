@@ -25,8 +25,7 @@
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             dateClick: (e)=> {
-                console.log(e)
-                // console.log(e.dateStr)
+                window.location.href = `{{ route('daily_report.edit') }}/${e.dateStr}`;
             }
         });
         calendar.render();
