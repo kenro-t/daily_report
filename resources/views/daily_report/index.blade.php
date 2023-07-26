@@ -1,5 +1,6 @@
 <h1>日報カレンダー一覧</h1>
 
+
 <div class='daily_report_list'>
         <ul>
             @foreach($daily_reports as $daily_report)
@@ -20,12 +21,14 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
 <script>
+    let target = `{{ route('daily_report.edit',['date'=>'target']) }}`;
     document.addEventListener('DOMContentLoaded', ()=> {
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             dateClick: (e)=> {
-                window.location.href = `{{ route('daily_report.edit') }}/${e.dateStr}`;
+                target = target.replace(/(target)/g,e.dateStr)
+                window.location.href = target;
             }
         });
         calendar.render();

@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
 // 日報
 Route::middleware('auth')->group(function () {
     Route::get('/daily_report', [DailyReportController::class, 'index'])->name('daily_report.index');
+    Route::get('/daily_report/edit/{date}', [DailyReportController::class, 'edit'])->name('daily_report.edit');
 });
 
 require __DIR__.'/auth.php';
