@@ -27,8 +27,8 @@
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             dateClick: (e)=> {
-                target = target.replace('targetDate',e.dateStr)
-                window.location.href = target;
+                const changedTarget = target.replace('targetDate',e.dateStr)
+                window.location.href = changedTarget;
             }
         });
         calendar.render();
