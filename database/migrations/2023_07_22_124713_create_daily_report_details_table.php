@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('daily_report_id');
             $table->string('project_title');
             $table->text('detail');
-            $table->dateTime('start_time', $precision = 0);
-            $table->dateTime('end_time', $precision = 0);
+            $table->dateTime('start_time', $precision = 0)->nullable();
+            $table->dateTime('end_time', $precision = 0)->nullable();
             $table->timestamps();
         });
     }
