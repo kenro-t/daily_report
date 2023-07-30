@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class DailyReport extends Model
 {
     use HasFactory;
+    // fillableでDB更新時に登録したいデータのホワイトリストが設定できる
+    protected $fillable = ['posted_date','user_id'];
+    // guardedでDB更新時に登録したくないデータのブラックリストが設定できる
+    // protected $guarded = ['name'];
 
     public function dailyReportDetails()
     {
