@@ -11,9 +11,9 @@ class DailyReportController extends Controller
 {
     // index
     public function index() {
-        $daily_reports = DailyReport::with('dailyReportDetails')->get();
+        $dailyReports = DailyReport::with('dailyReportDetails')->get();
         // dd($daily_reports);
-        return view('daily_report.index', ['daily_reports' => $daily_reports]);
+        return view('daily_report.index', ['daily_reports' => json_encode($dailyReports, JSON_UNESCAPED_UNICODE)]);
     }
 
     // create
