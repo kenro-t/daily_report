@@ -43,7 +43,8 @@
 
     }
 
-    let target = `{{ route('daily_report.create',['date'=>'targetDate']) }}`;
+    let create_target = `{{ route('daily_report.create',['date'=>'targetDate']) }}`;
+    let edit_target = `{{ route('daily_report.edit',['date'=>'targetDate']) }}`;
 
     document.addEventListener('DOMContentLoaded', ()=> {
         const calendarEl = document.getElementById('calendar');
@@ -51,7 +52,11 @@
             initialView: 'dayGridMonth',
             events:events,
             dateClick: (e)=> {
-                const changedTarget = target.replace('targetDate',e.dateStr)
+                const changedTarget = create_target.replace('targetDate',e.dateStr)
+                window.location.href = changedTarget;
+            },
+            eventClick: (e)=>{// イベントのクリックイベント
+		        const changedTarget = edit_target.replace('targetDate',e.event.startStr)
                 window.location.href = changedTarget;
             }
         });

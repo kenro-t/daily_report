@@ -63,11 +63,35 @@ class DailyReportController extends Controller
     }
 
     public function edit($date) {
+        // 日付とユーザーIDで該当の投稿を取得
         $dailyReport = DailyReport::with('dailyReportDetails')
             ->where('posted_date', $date)
             ->where('user_id',\Auth::user()->id)
             ->first();
 
-        return view('daily_report.create',['daily_report' => $dailyReport]);
+        // dd($dailyReport);
+        return view('daily_report.edit',[
+            'date' => $date,
+            'daily_report' => $dailyReport
+        ]);
+    }
+
+    public function update(Request $request, $date)
+    {
+        $dailyReport = DailyReport::with('dailyReportDetails')
+            ->where('posted_date', $date)
+            ->where('user_id',\Auth::user()->id)->first();
+    
+        $dailyReport->dailyReportDetails()->update([
+            "project_title" => $request->project_title,
+            "detail" => $request->detail
+        ]);
+        
+        if($dailyReport->save()) {
+            return redirect()->route('daily_report.index');
+        }
+        else {
+            return back()->with('flash_message', '提出に失敗しました')->withInput();
+        }
     }
 }

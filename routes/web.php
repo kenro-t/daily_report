@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/daily_report', [DailyReportController::class, 'index'])->name('daily_report.index');
     Route::get('/daily_report/create/{date}', [DailyReportController::class, 'create'])->name('daily_report.create');
     Route::post('/daily_report/store/{date}', [DailyReportController::class, 'store'])->name('daily_report.store');
+    Route::get('/daily_report/edit/{date}', [DailyReportController::class, 'edit'])->name('daily_report.edit');
+    Route::post('/daily_report/update/{date}', [DailyReportController::class, 'update'])->name('daily_report.update');
 });
 
 require __DIR__.'/auth.php';
