@@ -1,21 +1,8 @@
+@extends('layouts.parent')
+
 <h1>日報カレンダー一覧</h1>
 
-
-<div class='daily_report_list'>
-        {{-- <ul>
-            @foreach($dailyReports as $daily_report)
-                <li>
-                    {{ $daily_report->posted_date }} <br>
-                    @foreach($daily_report->dailyReportDetails as $dailyReportDetail)
-                        作業名:{{ $dailyReportDetail->project_title }}
-                        <br>
-                        作業内容:{{ $dailyReportDetail->detail }}
-                    @endforeach
-                </li>
-            @endforeach
-        </ul> --}}
-</div>
-
+@section('content')
 <!-- FullCalenderの導入　後でMixに移行する -->
 <div id='calendar' style='max-width:800px; margin:0 auto;'></div>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
@@ -63,3 +50,5 @@
         calendar.render();
     });
 </script>
+
+@endsection
