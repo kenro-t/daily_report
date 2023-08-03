@@ -1,16 +1,6 @@
 
 @extends('layouts.parent')
 
-@section('head')
-    @component('layouts.head')
-    @endcomponent
-@endsection
-
-@section('header')
-    @component('layouts.header')
-    @endcomponent
-@endsection
-
 @section('content')
     {{-- <h1>日報カレンダー一覧</h1> --}}
     <!-- FullCalenderの導入　後でMixに移行する -->
@@ -60,9 +50,4 @@
             calendar.render();
         });
     </script>  
-@endsection
-
-@section('footer')
-    @component('layouts.footer')
-    @endcomponent
 @endsection
