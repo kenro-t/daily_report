@@ -5,7 +5,7 @@
         @endcomponent
     </head>
     <body>
-        <header>
+        <header class="bg-yellow-300 h-10 leading-10 font-bold text-xl">
             @component('layouts.header')
             @endcomponent
         </header>
