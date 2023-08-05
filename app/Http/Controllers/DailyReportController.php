@@ -24,17 +24,29 @@ class DailyReportController extends Controller
     // create
     public function store(Request $request, $date) {
 
+        // 同日に既に投稿したdaily_report_idが存在すれば、そのIDを利用する
+        // 存在しない場合は新規daily_report_idを発行する
+
         try{
             $dailyReport = DB::transaction(function () use ($date, $request) {
                 // throw new \Exception('debug');
 
-                $dailyReport = new DailyReport();
                 // $dailyReportにオーバーライドしないとリレーション先の保存に差し障る
-                $dailyReport = $dailyReport
-                    ->create([
-                        'user_id' => \Auth::user()->id,
-                        'posted_date' => $date,
-                    ]);
+                $dailyReport = DailyReport::with('dailyReportDetails')
+                    ->where('posted_date', $date)
+                    ->where('user_id', \Auth::user()->id)
+                    ->first();
+
+                // daily_reportが存在しない場合に新規発行
+                if(is_null($dailyReport)) {
+                    $dailyReport = new DailyReport();
+                    $dailyReport = $dailyReport
+                        ->create([
+                            'user_id' => \Auth::user()->id,
+                            'posted_date' => $date,
+                        ]);
+                }
+
                 // daily_report_detail更新用にrequestからonlyで欲しいPOSTデータのみを取得する
                 $dailyReportRequest = $request
                     ->only(['project_title','detail']);
@@ -43,14 +55,9 @@ class DailyReportController extends Controller
                 $dailyReportRequest += ['daily_report_id'=> $dailyReport->id];
 
                 // daily_report_detailテーブルに挿入
-                $dailyReport
+                $dailyReport = $dailyReport
                     ->dailyReportDetails()
-                    ->create([
-                        'project_title' => $request->project_title,
-                        'detail' => $request->detail,
-                        'start_time'=> '',
-                        'end_time'=> ''
-                    ]);
+                    ->create($dailyReportRequest);
             });
             // 成功したらカレンダー画面へリダイレクト
             return redirect()->route('daily_report.index');
