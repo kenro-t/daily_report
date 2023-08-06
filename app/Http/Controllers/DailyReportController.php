@@ -83,19 +83,28 @@ class DailyReportController extends Controller
         ]);
     }
 
-    public function update(Request $request, $date)
+    public function update(Request $request, $daily_report_detail_id)
     {
-        $dailyReport = DailyReport::with('dailyReportDetails')
-            ->where('posted_date', $date)
-            ->where('user_id',\Auth::user()->id)->first();
-    
-        // onlyメソッドでもっと簡単に渡せない？
-        $dailyReport->dailyReportDetails()->update([
-            "project_title" => $request->project_title,
-            "detail" => $request->detail
-        ]);
+        // \DB::enableQueryLog();
+        // この時点ではメインdaily_reports、relationプロパティにdaily_report_details
+        $dailyReport = DailyReport::withWhereHas('dailyReportDetailEdit', function ($query) use ($daily_report_detail_id) {
+            $query->where('id', $daily_report_detail_id);
+        })->first();
+
+        // relationプロパティからdaily_report_detailsを取り出す
+        $dailyReportDetail = $dailyReport
+            ->dailyReportDetailEdit()
+            ->find($daily_report_detail_id);
+
+        // 更新処理
+        $dailyReportDetail = $dailyReportDetail
+            ->update(
+                $request->only("project_title","detail")
+            );
+
+        // dd(\DB::getQueryLog());
         
-        if($dailyReport->save()) {
+        if($dailyReportDetail === true) {
             return redirect()->route('daily_report.index');
         }
         else {

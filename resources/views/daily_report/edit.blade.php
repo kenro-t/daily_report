@@ -4,9 +4,9 @@
 {{-- withメソッドでここに入れてくる --}}
 {{ session('flash_message') }}
 @php
-// dd($daily_report)
+// dd($daily_report->dailyReportDetailEdit->id)
 @endphp
-<form action="{{ route('daily_report.update', ['date' => $date]) }}" method="post">
+<form action="{{ route('daily_report.update', ['daily_report_detail_id' => $daily_report->dailyReportDetailEdit->id]) }}" method="post">
     @csrf
     案件名<input type="text" name='project_title' value="{{ old('project_title', $daily_report->dailyReportDetailEdit->project_title) }}"><br>
     内容<textarea name="detail" id="" cols="30" rows="10">{{ old('detail',$daily_report->dailyReportDetailEdit->detail) }}</textarea><br>    
