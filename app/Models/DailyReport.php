@@ -17,4 +17,9 @@ class DailyReport extends Model
     {
         return $this->hasMany('App\Models\DailyReportDetail');
     }
+
+    public function dailyReportDetailEdit()
+    {
+        return $this->hasOne('App\Models\DailyReportDetail');
+    }
 }

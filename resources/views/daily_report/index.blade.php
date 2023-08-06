@@ -17,7 +17,7 @@
             // その日に登録されたプロジェクトの数だけループ
             for (const daily_report_detail of daily_report.daily_report_details) {
                 events.push({
-                    id: daily_report.id,// ユニークID
+                    id: daily_report_detail.id,// ユニークID daily_report_detail_id
                     start: daily_report.posted_date,// イベント開始日
                     end: "",// イベント終了日
                     title: daily_report_detail.project_title,// イベントのタイトル
@@ -31,7 +31,7 @@
         }
 
         let create_target = `{{ route('daily_report.create',['date'=>'targetDate']) }}`;
-        let edit_target = `{{ route('daily_report.edit',['date'=>'targetDate']) }}`;
+        let edit_target = `{{ route('daily_report.edit',['daily_report_detail_id'=>'targetDailyReportDetailId']) }}`;
 
         document.addEventListener('DOMContentLoaded', ()=> {
             const calendarEl = document.getElementById('calendar');
@@ -43,7 +43,7 @@
                     window.location.href = changedTarget;
                 },
                 eventClick: (e)=>{// イベントのクリックイベント
-                    const changedTarget = edit_target.replace('targetDate',e.event.startStr)
+                    const changedTarget = edit_target.replace('targetDailyReportDetailId',e.event._def.publicId)
                     window.location.href = changedTarget;
                 }
             });
