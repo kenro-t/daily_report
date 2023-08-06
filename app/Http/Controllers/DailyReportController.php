@@ -69,16 +69,16 @@ class DailyReportController extends Controller
         }
     }
 
-    public function edit($date) {
+    public function edit($daily_report_detail_id) {
         // 日付とユーザーIDで該当の投稿を取得
-        $dailyReport = DailyReport::with('dailyReportDetails')
-            ->where('posted_date', $date)
-            ->where('user_id',\Auth::user()->id)
+        // withWhereHasを使う with＋wherehasだとリレーション先の絞り込み条件が指定されないので注意
+        $dailyReport = DailyReport::withWhereHas('dailyReportDetailEdit', function ($query) use ($daily_report_detail_id) {
+                $query->where('id', $daily_report_detail_id);
+            })
             ->first();
 
-        // dd($dailyReport);
-        return view('daily_report.edit',[
-            'date' => $date,
+            return view('daily_report.edit',[
+            'date' => $dailyReport->posted_date,
             'daily_report' => $dailyReport
         ]);
     }
@@ -89,6 +89,7 @@ class DailyReportController extends Controller
             ->where('posted_date', $date)
             ->where('user_id',\Auth::user()->id)->first();
     
+        // onlyメソッドでもっと簡単に渡せない？
         $dailyReport->dailyReportDetails()->update([
             "project_title" => $request->project_title,
             "detail" => $request->detail
