@@ -111,4 +111,40 @@ class DailyReportController extends Controller
             return back()->with('flash_message', '提出に失敗しました')->withInput();
         }
     }
+
+    public function delete (Request $request, $daily_report_detail_id) {
+
+        try{
+            // throw new \Exception ('debug');
+            $dailyReport = DB::transaction(function () use ($daily_report_detail_id) {
+                $dailyReport = DailyReport::withWhereHas('dailyReportDetailEdit', function ($query) use ($daily_report_detail_id) {
+                    $query->where('id', $daily_report_detail_id);
+                })->first();
+                // daily_reportテーブル参照用にIDを代入
+                $dailyReportId = $dailyReport->id;
+                
+                $dailyReportDetail = $dailyReport
+                    ->dailyReportDetailEdit()
+                    ->find($daily_report_detail_id);
+
+                // 投稿の削除
+                if ($dailyReportDetail->delete()) {
+                    $dailyReport2 = DailyReport::with('dailyReportDetails')
+                        ->where('id', $dailyReportId)
+                        ->first();
+
+                    // daily_reportsにぶら下がるdaily_report_detailsが存在しない場合
+                    if (count($dailyReport2->dailyReportDetails) === 0) {
+                        // 該当のdaily_reportsを削除する
+                        $dailyReport2->delete();
+                    }
+                }
+                
+            });
+            return redirect()->route('daily_report.index');
+        }
+        catch(\Exception $e) {
+            return back()->with('flash_message', '削除に失敗しました')->withInput();
+        }
+    }
 }
