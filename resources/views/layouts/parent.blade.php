@@ -9,7 +9,7 @@
             @component('layouts.header')
             @endcomponent
         </header>
-        <div class="container">
+        <div class="container m-auto">
             @yield('content')
         </div>
         <footer>
