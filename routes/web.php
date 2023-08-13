@@ -29,6 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::prefix('administrator')->group(function () {
+        Route::get('login', [ProfileController::class, 'edit'])->name('administrator.login.index');
+    });
+});
+
 // 日報
 Route::middleware('auth')->group(function () {
     Route::get('/daily_report', [DailyReportController::class, 'index'])->name('daily_report.index');
@@ -40,3 +46,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::prefix('administrator')->name('administrator.')->group(function(){
+    require __DIR__.'/administrator/auth.php';
+});
