@@ -48,5 +48,10 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::prefix('administrator')->name('administrator.')->group(function(){
+
+    Route::get('/dashboard', function () {
+        return view('administrator.dashboard');
+    })->middleware(['auth:administrator'])->name('dashboard');
+
     require __DIR__.'/administrator/auth.php';
 });

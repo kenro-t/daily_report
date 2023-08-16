@@ -43,8 +43,8 @@ class Administrator extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function dailyReports()
-    {
-        return $this->hasMany('App\Models\DailyReport');
-    }
+    // public function dailyReports()
+    // {
+    //     return $this->hasMany('App\Models\DailyReport');
+    // }
 }
