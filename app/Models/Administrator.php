@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\AdministratorResetPassword as ResetPasswordNotification;
 
 class Administrator extends Authenticatable
 {
@@ -43,8 +44,8 @@ class Administrator extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // public function dailyReports()
-    // {
-    //     return $this->hasMany('App\Models\DailyReport');
-    // }
+    public function sendPasswordResetNotification($token){
+
+        $this->notify(new ResetPasswordNotification($token));
+    }
 }
