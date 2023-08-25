@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DailyReportController;
+use App\Http\Controllers\Administrator\IndexController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +53,10 @@ Route::prefix('administrator')->name('administrator.')->group(function(){
     Route::get('/dashboard', function () {
         return view('administrator.dashboard');
     })->middleware(['auth:administrator'])->name('dashboard');
+
+    Route::middleware('auth:administrator')->group(function () {
+        Route::get('/', [IndexController::class, 'index'])->name('index');
+    });
 
     require __DIR__.'/administrator/auth.php';
 });
