@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\Administrator\IndexController;
+use App\Http\Controllers\Administrator\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// 管理者
 Route::prefix('administrator')->name('administrator.')->group(function(){
 
     Route::get('/dashboard', function () {
@@ -56,6 +58,10 @@ Route::prefix('administrator')->name('administrator.')->group(function(){
 
     Route::middleware('auth:administrator')->group(function () {
         Route::get('/', [IndexController::class, 'index'])->name('index');
+        
+        Route::prefix('user')->name('user.')->group(function(){
+            Route::get('/', [UserController::class, 'index'])->name('index');
+        })->middleware(['auth:administrator'])->name('dashboard');
     });
 
     require __DIR__.'/administrator/auth.php';
