@@ -11,4 +11,8 @@ class UserController extends Controller
     public function index () {
         return view('administrator.user.index');
     }
+
+    public function edit () {
+        return view('administrator.user.edit');
+    }
 }

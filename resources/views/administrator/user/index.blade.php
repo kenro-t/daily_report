@@ -42,7 +42,7 @@
                         <td class="border px-4 py-2">山田 太郎</td>
                         <td class="border px-4 py-2">yamada@example.com</td>
                         <td class="border px-4 py-2">
-                            <button class="btn btn-sm btn-primary">編集</button>
+                            <a href="{{ route('administrator.user.edit') }}" class="btn btn-sm btn-primary">編集</a>
                             <button class="btn btn-sm btn-danger">削除</button>
                         </td>
                     </tr>
