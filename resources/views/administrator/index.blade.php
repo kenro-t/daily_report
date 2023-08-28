@@ -33,7 +33,7 @@
                 <h2 class="text-xl font-semibold mb-4">日報管理</h2>
                 <p class="text-gray-600">投稿された日報を確認・出力ができます。</p>
                 <!-- <p class="text-gray-600">マル月マル日</p> -->
-                <a href="#" class="btn float-right">表示</a>
+                <a href="{{ route('administrator.daily_report.index') }}" class="btn float-right">表示</a>
             </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold mb-4">通知管理</h2>

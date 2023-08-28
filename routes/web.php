@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\Administrator\IndexController;
 use App\Http\Controllers\Administrator\UserController;
+use App\Http\Controllers\Administrator\DailyReportController as AdministratorDailyReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,6 +63,10 @@ Route::prefix('administrator')->name('administrator.')->group(function(){
         Route::prefix('user')->name('user.')->group(function(){
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::get('/edit', [UserController::class, 'edit'])->name('edit');
+        })->middleware(['auth:administrator'])->name('dashboard');
+
+        Route::prefix('daily_report')->name('daily_report.')->group(function(){
+            Route::get('/', [AdministratorDailyReportController::class, 'index'])->name('index');
         })->middleware(['auth:administrator'])->name('dashboard');
     });
 
