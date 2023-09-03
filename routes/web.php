@@ -67,6 +67,7 @@ Route::prefix('administrator')->name('administrator.')->group(function(){
 
         Route::prefix('daily_report')->name('daily_report.')->group(function(){
             Route::get('/', [AdministratorDailyReportController::class, 'index'])->name('index');
+            Route::get('/weekly_templete', [AdministratorDailyReportController::class, 'weekly_templete'])->name('weekly_templete');
         })->middleware(['auth:administrator'])->name('dashboard');
     });
 
