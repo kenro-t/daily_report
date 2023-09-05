@@ -17,12 +17,20 @@ class DailyReportController extends Controller
 
     public function weekly_templete (Request $request) {
 
-        $user = User::with('dailyReports.dailyReportDetails')->first();
+        $users = User::with('dailyReports.dailyReportDetails')->get();
 
-        foreach ($user->dailyReports as $report) {
-            foreach ($report->dailyReportDetails as $detail) {
-                var_dump($detail->detail);
+        // 週間表示のため、ターゲットの週のみの配列を作成する
+        $postedDate = new DateTimeImmutable($dailyReport->posted_date);
+        foreach ($users as $user) {
+            foreach ($user->dailyReports as $dailyReport) {
+                // ターゲットの週との日数を比較する
+                $interval = $requestStartOfWeekDate->diff($postedDate);
+                // 日数の差が7以内
+                if ($interval->d >= 0 && $interval->d <= 7) {
+                    $arr[] = $dailyReport;
+                }
             }
+            
         }
 
         // 1週間の日付の配列を作成する
@@ -36,7 +44,9 @@ class DailyReportController extends Controller
         // 非同期通信の場合
         if ($request->ajax()) {
             // weeklyビューに指定の1週間を渡して、renderする
-            $data = ['chosenWeek' => $chosenWeek];
+            $data = [
+                'chosenWeek' => $chosenWeek
+            ];
             $view = View::make('administrator.daily_report.partials.weekly', $data)->render();
 
             return response()->json(['html' => $view]);
