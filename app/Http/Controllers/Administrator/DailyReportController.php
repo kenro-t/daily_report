@@ -21,8 +21,9 @@ class DailyReportController extends Controller
 
         // 週間表示のため、ターゲットの週のみの配列を作成する
         $thisWeekReports = [];
+        $userArray = [];
         $requestStartOfWeekDate = new DateTimeImmutable($request->query('date'));
-        foreach ($users as $user) {
+        foreach ($users as $i => $user) {
             foreach ($user->dailyReports as $dailyReport) {
                 $postedDate = new DateTimeImmutable($dailyReport->posted_date);
                 // ターゲットの週との日数を比較する
@@ -32,28 +33,35 @@ class DailyReportController extends Controller
                     $thisWeekReports[] = $dailyReport;
                 }
             }
-            
+
+            // 1週間の日付の配列を作成する
+            $chosenWeek = [];
+            $daysInAWeek = 7;
+            for ($k=0; $k < $daysInAWeek; $k++) {
+                $chosenWeek[$k]["date"] = $requestStartOfWeekDate->modify("+$k day")->format('Y-m-d');
+                foreach ($thisWeekReports as $report) {
+                    if ($report->posted_date === $chosenWeek[$k]["date"]) {
+                        $chosenWeek[$k]["report"] = $report;
+                    }
+                }
+            }
+            $userArray[$i]['username'] = $user->name;
+            $userArray[$i]['chosenWeek'] = $chosenWeek;
         }
 
         // 1週間の日付の配列を作成する
-        $chosenWeek = [];
+        $oneWeekDates = [];
         $daysInAWeek = 7;
         for ($i=0; $i < $daysInAWeek; $i++) {
-            // $addedDay = $i +1;
-            $chosenWeek[$i]["date"] = $requestStartOfWeekDate->modify("+$i day")->format('Y-m-d');
-            foreach ($thisWeekReports as $report) {
-                if ($report->posted_date === $chosenWeek[$i]["date"]) {
-                    $chosenWeek[$i]["report"] = $report;
-                }
-            }
+            $oneWeekDates[$i] = $requestStartOfWeekDate->modify("+$i day")->format('Y-m-d');
         }
 
         // 非同期通信の場合
         if ($request->ajax()) {
             // weeklyビューに指定の1週間を渡して、renderする
             $data = [
-                'chosenWeek' => $chosenWeek,
-                'thisWeekReports' => $thisWeekReports
+                'oneWeekDates' => $oneWeekDates,
+                'chosenWeekReports' => $userArray
             ];
             $view = View::make('administrator.daily_report.partials.weekly', $data)->render();
 
