@@ -65,7 +65,7 @@
         // 結果を表示
         console.log(startOfWeek);
 
-        startOfWeek.setDate(startOfWeek.getDate() + 1);
+        // startOfWeek.setDate(startOfWeek.getDate() + 1);
         console.log(formatDateToYYYYMMDD(startOfWeek));
 
 
