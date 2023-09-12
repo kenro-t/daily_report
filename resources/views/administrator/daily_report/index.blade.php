@@ -30,8 +30,35 @@
                 </table>
             </div>
         </div>
+
+        {{-- モーダル --}}
+        <label for="hogehoge" class="btn btn-primary">開く</label>
+        <input type="checkbox" id="hogehoge" class="modal-toggle">
+        <div class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">タイトルです</h3>
+            <p class="py-4">内容です</p>
+            <div class="modal-action">
+            <label for="hogehoge" class="btn">閉じる</label>
+            </div>
+        </div>
+        </div>
     </main>
+    
     <script>
+
+        // 画面に表示されているreport_detail_idの読み込み
+        function loadReportDetailId () {
+            const reportTitles = document.getElementsByClassName('report_title');
+            
+            for (const reportTitle of reportTitles) {
+                reportTitle.addEventListener('click', (e) => {
+                    const reportDetailId = e.target.dataset.report_detail_id; // カスタムデータ属性の名前に注意
+                    console.log(reportDetailId);
+                });
+            }
+        }
+        
         function getStartOfWeek(date) {
             // 引数のdateオブジェクトが指定されない場合は、現在の日付を使用
             if (!date) {
@@ -93,6 +120,9 @@
             const responseHtml = await response.json();
             // console.log(responseHtml);
             weekly.innerHTML = responseHtml.html;
+
+            // 画面に表示されているレポートのIDをロード
+            loadReportDetailId();
         });
     </script>
 @endsection

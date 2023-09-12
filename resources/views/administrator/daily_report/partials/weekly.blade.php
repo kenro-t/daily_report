@@ -12,7 +12,7 @@
                 <td class="py-2 text-center">
                     @isset($day['report'])
                         @foreach ($day['report']->dailyReportDetails as $dailyReportDetail)
-                            {{ $dailyReportDetail->project_title }}
+                            <span class="report_title" data-report_detail_id="{{$dailyReportDetail->id}}">{{ $dailyReportDetail->project_title }}</span>
                         @endforeach
                     @endisset
                 </td>
