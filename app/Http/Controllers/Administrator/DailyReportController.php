@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Models\User;
+use App\Models\DailyReport;
+use App\Models\DailyReportDetail;
 use DateTimeImmutable;
 
 class DailyReportController extends Controller
@@ -13,6 +15,17 @@ class DailyReportController extends Controller
     //
     public function index () {
         return view('administrator.daily_report.index');
+    }
+
+    // 日報閲覧
+    public function show (Request $request) {
+        // 日報詳細を取得
+        $dailyReportDetail = DailyReportDetail::find($request->input('report_detail_id'));
+        // viewにjson形式でタイトルと詳細をレスポンス
+        return response()->json([
+            'project_title' => $dailyReportDetail->project_title,
+            'detail' => $dailyReportDetail->detail,
+        ]);
     }
 
     public function weekly_templete (Request $request) {

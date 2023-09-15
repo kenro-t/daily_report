@@ -32,31 +32,56 @@
         </div>
 
         {{-- モーダル --}}
-        <label for="hogehoge" class="btn btn-primary">開く</label>
-        <input type="checkbox" id="hogehoge" class="modal-toggle">
+        {{-- <label for="hogehoge" class="btn btn-primary">開く</label> --}}
+        <input type="checkbox" id="report_modal" class="modal-toggle">
         <div class="modal">
         <div class="modal-box">
-            <h3 class="font-bold text-lg">タイトルです</h3>
-            <p class="py-4">内容です</p>
+            <h3 id="modal_report_detail_title" class="font-bold text-lg">タイトルです</h3>
+            <p id="modal_report_detail_detail" class="py-4">内容です</p>
             <div class="modal-action">
-            <label for="hogehoge" class="btn">閉じる</label>
+            <label for="report_modal" class="btn">閉じる</label>
             </div>
         </div>
         </div>
     </main>
     
     <script>
+        // 非同期POST通信用にトークンを作成
+        const csrfToken = "{{ csrf_token() }}";
 
         // 画面に表示されているreport_detail_idの読み込み
         function loadReportDetailId () {
             const reportTitles = document.getElementsByClassName('report_title');
+            const modalReportDetailTitle = document.getElementById('modal_report_detail_title');
+            const modalReportDetailDetail = document.getElementById('modal_report_detail_detail');
             
             for (const reportTitle of reportTitles) {
-                reportTitle.addEventListener('click', (e) => {
+                reportTitle.addEventListener('click', async (e) => {
                     const reportDetailId = e.target.dataset.report_detail_id; // カスタムデータ属性の名前に注意
-                    console.log(reportDetailId);
+                    // 非同期でクリックした日報のデータを取得
+                    const response = await fetchReportDetail(reportDetailId);
+                    // モーダル内に取得したデータを反映
+                    modalReportDetailTitle.innerHTML = response.project_title;
+                    modalReportDetailDetail.innerHTML = response.detail;
                 });
             }
+        }
+        // 日報の内容を非同期で取得
+        async function fetchReportDetail (reportDetailId) {
+            const url = '/administrator/daily_report/show';
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            };
+            const options = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({report_detail_id: reportDetailId})
+            };
+            const response = await fetch(url, options);
+            const data = await response.json();
+            return data;
         }
         
         function getStartOfWeek(date) {
