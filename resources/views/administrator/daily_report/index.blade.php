@@ -130,24 +130,29 @@
             const date = formatDateToYYYYMMDD(startOfWeek);
             params.append('date', date);
 
+            // 今週の日報データを取得
+            const response = await fetchWeeklyReportData (params);
+
+            if (!response.ok) {
+                alert("カレンダーの取得に失敗しました。");
+                return;
+            }
+            const responseHtml = await response.json();
+            weekly.innerHTML = responseHtml.html;
+
+            // 画面に表示されているレポートのIDをロード
+            loadReportDetailId();
+        });
+        // ターゲットとなる週の日報データを取得
+        async function fetchWeeklyReportData (params) {
             const url = `/administrator/daily_report/weekly_templete/?${params.toString()}`;
             const headers = {'X-Requested-With': 'XMLHttpRequest'};
             const options = {
                 method: 'GET',
                 headers: headers
             };
-            const response = await fetch(url, options);
-            // console.log(response);
-            if (!response.ok) {
-                alert("カレンダーの取得に失敗しました。");
-                return;
-            }
-            const responseHtml = await response.json();
-            // console.log(responseHtml);
-            weekly.innerHTML = responseHtml.html;
 
-            // 画面に表示されているレポートのIDをロード
-            loadReportDetailId();
-        });
+           return await fetch(url, options);
+        }
     </script>
 @endsection
