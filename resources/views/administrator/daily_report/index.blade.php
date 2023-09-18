@@ -6,8 +6,8 @@
                 <div class="flex justify-between mb-3">
                     <h1 class="text-2xl font-semibold mb-4">日報一覧</h1>
                     <div class="flex">
-                        <a href="#" class="btn mr-3">前の週</a>
-                        <a href="#" class="btn">次の週</a>
+                        <a href="javascript:void(0)" data-change_week="prev" class="change_week btn mr-3">前の週</a>
+                        <a href="javascript:void(0)" data-change_week="next" class="change_week btn">次の週</a>
                     </div>
                 </div>
                 
@@ -32,12 +32,11 @@
         </div>
 
         {{-- モーダル --}}
-        {{-- <label for="hogehoge" class="btn btn-primary">開く</label> --}}
         <input type="checkbox" id="report_modal" class="modal-toggle">
         <div class="modal">
         <div class="modal-box">
-            <h3 id="modal_report_detail_title" class="font-bold text-lg">タイトルです</h3>
-            <p id="modal_report_detail_detail" class="py-4">内容です</p>
+            <h3 id="modal_report_detail_title" class="font-bold text-lg"></h3>
+            <p id="modal_report_detail_detail" class="py-4"></p>
             <div class="modal-action">
             <label for="report_modal" class="btn">閉じる</label>
             </div>
@@ -111,16 +110,18 @@
             return `${year}/${month}/${day}`;
         }
 
+        // パラメータが存在する場合は受け取る
+        const currentURL = window.location.href;
+        const params = new URLSearchParams(currentURL?.split('?')[1]);
+        // dateパラメータが存在する場合は受け取る
+        const getParamDate = params.get('date');
+        let dateObj;
+        if (getParamDate !== null) {
+            dateObj = new Date(getParamDate);
+        }
+
         // 現在の週の初めの日付を取得
-        const startOfWeek = getStartOfWeek();
-
-        // 結果を表示
-        console.log(startOfWeek);
-
-        // startOfWeek.setDate(startOfWeek.getDate() + 1);
-        console.log(formatDateToYYYYMMDD(startOfWeek));
-
-
+        const startOfWeek = getStartOfWeek(dateObj);
         const weekly = document.getElementById('weekly');
 
         // 画面読み込み時に週間カレンダーを表示
@@ -143,6 +144,29 @@
             // 画面に表示されているレポートのIDをロード
             loadReportDetailId();
         });
+
+        const changeWeek = document.getElementsByClassName('change_week');
+        for (const changeTarget of changeWeek) {
+            changeTarget.addEventListener('click', (e)=> {
+                const accsessWeek = e.target.dataset.change_week;
+                let chg;
+                if (accsessWeek === 'prev') {
+                    chg = -7;
+                } else if (accsessWeek === 'next') {
+                    chg = 7;
+                }
+                // セットされている日付の１週間前の日付をセット
+                startOfWeek.setDate(startOfWeek.getDate() + chg);
+                const formatDate = formatDateToYYYYMMDD(startOfWeek);
+                // dateパラメータをセット
+                params.set('date', formatDate);
+                // 遷移先のURLを作成
+                const newUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+                // ブラウザのURLに遷移
+                window.location.href = newUrl;
+            });
+        }
+
         // ターゲットとなる週の日報データを取得
         async function fetchWeeklyReportData (params) {
             const url = `/administrator/daily_report/weekly_templete/?${params.toString()}`;
