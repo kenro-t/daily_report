@@ -66,7 +66,7 @@ class DailyReportController extends Controller
         $oneWeekDates = [];
         $daysInAWeek = 7;
         for ($i=0; $i < $daysInAWeek; $i++) {
-            $oneWeekDates[$i] = $requestStartOfWeekDate->modify("+$i day")->format('Y-m-d');
+            $oneWeekDates[$i] = $requestStartOfWeekDate->modify("+$i day")->format('m/d');
         }
 
         // 非同期通信の場合
