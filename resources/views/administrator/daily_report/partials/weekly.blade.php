@@ -12,7 +12,7 @@
                 <td class="py-2 text-center">
                     @isset($day['report'])
                         @foreach ($day['report']->dailyReportDetails as $dailyReportDetail)
-                            <label for="report_modal" class="report_title" data-report_detail_id="{{$dailyReportDetail->id}}">
+                            <label for="report_modal" class="report_title cursor-pointer" data-report_detail_id="{{$dailyReportDetail->id}}">
                                 {{ $dailyReportDetail->project_title }}
                             </label>
                         @endforeach
