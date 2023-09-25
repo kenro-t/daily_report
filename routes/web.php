@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DailyReportController;
+use App\Http\Controllers\Administrator\IndexController;
+use App\Http\Controllers\Administrator\UserController;
+use App\Http\Controllers\Administrator\DailyReportController as AdministratorDailyReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,11 +50,27 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// 管理者
 Route::prefix('administrator')->name('administrator.')->group(function(){
 
     Route::get('/dashboard', function () {
         return view('administrator.dashboard');
     })->middleware(['auth:administrator'])->name('dashboard');
+
+    Route::middleware('auth:administrator')->group(function () {
+        Route::get('/', [IndexController::class, 'index'])->name('index');
+        
+        Route::prefix('user')->name('user.')->group(function(){
+            Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::get('/edit', [UserController::class, 'edit'])->name('edit');
+        })->middleware(['auth:administrator'])->name('dashboard');
+
+        Route::prefix('daily_report')->name('daily_report.')->group(function(){
+            Route::get('/', [AdministratorDailyReportController::class, 'index'])->name('index');
+            Route::get('/weekly_templete', [AdministratorDailyReportController::class, 'weekly_templete'])->name('weekly_templete');
+            Route::post('/show', [AdministratorDailyReportController::class, 'show'])->name('show');
+        })->middleware(['auth:administrator'])->name('dashboard');
+    });
 
     require __DIR__.'/administrator/auth.php';
 });
