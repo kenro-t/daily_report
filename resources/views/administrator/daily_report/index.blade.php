@@ -6,6 +6,7 @@
                 <div class="flex justify-between mb-3">
                     <h1 class="text-2xl font-semibold mb-4">日報一覧</h1>
                     <div class="flex">
+                        <a href="javascript:void(0)" id="current_week" class="btn mr-3">今週</a>
                         <a href="javascript:void(0)" data-change_week="prev" class="change_week btn mr-3">前の週</a>
                         <a href="javascript:void(0)" data-change_week="next" class="change_week btn">次の週</a>
                     </div>
@@ -178,5 +179,13 @@
 
            return await fetch(url, options);
         }
+
+        // 今週に遷移
+        document.getElementById("current_week").addEventListener('click', ()=> {
+            // パラメータを除いたURLを取得
+            const url = currentURL?.split('?')[0];
+            // 遷移
+            window.location.href = url;
+        });
     </script>
 @endsection
